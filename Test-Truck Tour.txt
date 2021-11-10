@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+public class Pump {
+    public int amount;
+    public int distance;
+}
+
+class Solution {
+    static void Main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution */
+        
+        Queue<Pump> pumpList = new Queue<Pump>();
+        int n = int.Parse(Console.ReadLine());
+        for(int i=0; i<n; i++)
+        {
+            string line = Console.ReadLine();
+            string[] array = line.Split(new char[] {' '});
+            pumpList.Enqueue(new Pump() { amount = int.Parse(array[0]), distance = int.Parse(array[1]) });
+        }
+        
+        for(int i=0; i<pumpList.Count; i++)
+        {
+            int amount=0;
+            foreach(var pump in pumpList)
+            {
+                amount += pump.amount;
+                amount -= pump.distance;
+
+                if (amount < 0)
+                    break;
+            }
+            if (amount > 0) 
+            {
+                Console.WriteLine(i);
+                return;
+            }
+            else 
+            {
+                var pump = pumpList.Dequeue();
+                pumpList.Enqueue(pump);
+            }   
+        }
+    }
+}

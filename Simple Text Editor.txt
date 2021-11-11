@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+class Solution {
+    static void Main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution */
+         TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int q = Convert.ToInt32(Console.ReadLine().Trim());
+
+        List<List<string>> arr = new List<List<string>>();
+
+        for (int i = 0; i < q; i++)
+        {
+            arr.Add(new List<string>(Console.ReadLine().TrimEnd().Split(' ')));
+        }
+
+        SimpleTextEditor(arr, textWriter);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+    
+    static void SimpleTextEditor(List<List<string>> arr, TextWriter textWriter)
+    {
+        Stack<string> st = new Stack<string>();
+        var s = "";
+        var temp = "";
+        foreach(var line in arr)
+        {
+            int q, k;
+            q = int.Parse(line[0]);
+
+        switch(q) {
+            case 1:
+                st.Push(s);
+                temp = line[1];
+                s = s + temp;
+                break;
+            case 2:
+                st.Push(s);
+                k = int.Parse(line[1]);
+                s = s.Substring(0, s.Length - k);
+                break;
+            case 3:
+                k = int.Parse(line[1]);
+                textWriter.WriteLine(s[k-1]);
+                break;
+            case 4:
+                s = st.Peek();
+                st.Pop();
+                break;
+        }
+        }
+    }
+}

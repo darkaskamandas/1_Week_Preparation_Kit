@@ -1,0 +1,83 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+class Solution {
+   static void Main(String[] args) {
+
+        StackQueue s = new StackQueue();
+
+        int count = Convert.ToInt32(Console.ReadLine());
+
+        for(int i = 0; i < count; i++)
+        {
+            s.PerformAction(Console.ReadLine());
+            
+        }
+
+    }
+  
+}
+
+class StackQueue
+    {
+        Stack<string> lifoStack = new Stack<string>();
+        Stack<string> fifoStack = new Stack<string>();
+
+
+        public void PerformAction(string action)
+        {
+            string[] command = action.Split(' ');
+            if (command.Length == 2 && command[0] == "1")
+            {
+                Enqueue(command[1]);
+            }
+            else if (command[0] == "2")
+            {
+                Dequeue();
+            }
+            else if (command[0] == "3")
+            {
+                Print();
+            }
+            else
+            {
+                Console.WriteLine("Invalid Command {0}", action);
+            }
+
+        }
+
+        public void Enqueue(string item)
+        {
+            lifoStack.Push(item);
+        }
+
+        public void Dequeue()
+        {
+            PrepareFifoStack();
+            if (fifoStack.Count > 0)
+            {
+                fifoStack.Pop();
+            }
+        }
+
+        public void Print()
+        {
+            PrepareFifoStack();
+
+            if (fifoStack.Count > 0)
+            {
+                Console.WriteLine(fifoStack.Peek());
+            }
+        }
+
+        private void PrepareFifoStack()
+        {
+            if (fifoStack.Count == 0)
+            {
+                while (lifoStack.Count > 0)
+                {
+                    fifoStack.Push(lifoStack.Pop());
+                }
+            }
+        }
+    }

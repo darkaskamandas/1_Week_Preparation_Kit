@@ -1,0 +1,100 @@
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'isBalanced' function below.
+     *
+     * The function is expected to return a STRING.
+     * The function accepts STRING s as parameter.
+     */
+     
+    class Brackets {
+        public string OpeningBracket {get;set;}
+        public string ClosingBracket {get;set;}
+    }
+
+    public static string isBalanced(string s)
+    {
+        bool wasRunSuccessful = true;
+        string currentElement;
+        
+        List<Brackets> bracketList = new List<Brackets>();
+        Brackets currentBracket;
+        
+        bracketList.Add(new Brackets { OpeningBracket = "{", ClosingBracket = "}" });
+        bracketList.Add(new Brackets { OpeningBracket = "(", ClosingBracket = ")" });
+        bracketList.Add(new Brackets { OpeningBracket = "[", ClosingBracket = "]" });
+        
+        Stack<string> bracketStack = new Stack<string>();
+        try {
+            for(int i = 0; i < s.Length; i++) {
+                currentElement = s.ElementAt(i).ToString();
+                if (bracketList.Any(b => b.OpeningBracket.Equals(currentElement))) {
+                    bracketStack.Push(currentElement);
+                }
+                else if (bracketList.Any(b => b.ClosingBracket.Equals(currentElement))) {
+                    currentBracket = bracketList.First(b => b.ClosingBracket.Equals(currentElement));
+                    
+                    if (bracketStack.Count > 0 && bracketStack.Peek().Equals(currentBracket.OpeningBracket)) {
+                        bracketStack.Pop();
+                    }
+                    else {
+                        wasRunSuccessful = false;
+                        break;
+                    }
+                }
+                else {
+                    wasRunSuccessful = false;
+                    break;
+                }
+            }
+            
+            if (bracketStack.Count > 0) {
+                wasRunSuccessful = false;
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.Message + Environment.NewLine + e.StackTrace);
+        }
+        
+        
+        return wasRunSuccessful ? "YES" : "NO";
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int t = Convert.ToInt32(Console.ReadLine().Trim());
+
+        for (int tItr = 0; tItr < t; tItr++)
+        {
+            string s = Console.ReadLine();
+
+            string result = Result.isBalanced(s);
+
+            textWriter.WriteLine(result);
+        }
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}

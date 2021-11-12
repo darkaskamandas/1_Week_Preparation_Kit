@@ -1,0 +1,49 @@
+
+
+/* 
+The structure of the node is
+
+typedef struct node {
+
+	int freq;
+    char data;
+    node * left;
+    node * right;
+    
+} node;
+
+*/
+
+
+void decode_huff(node * root, string s) {
+    string res;
+    node* cur = root;
+    // cout << s << endl;
+
+    for (char c: s)
+    {
+        // cout << c << " test " << cur->data << endl;
+
+
+        if (c == '0')
+        {
+            cur = cur->left;
+        }
+        else if (c == '1')
+        {
+            cur = cur->right;
+        }
+        
+        if (!cur->left && !cur->right)
+        {
+            // cout << cur->data;
+            res += cur->data;
+            cur = root;
+        }
+        
+    }
+    
+    cout << res << endl;
+}
+
+

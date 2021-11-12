@@ -11,6 +11,7 @@ using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Text;
 using System;
+using System.Globalization;
 
 class Result
 {
@@ -24,31 +25,10 @@ class Result
 
     public static string timeConversion(string s)
     {
-        string time = string.Empty;
-        try
-        {
-            string meridiem = s.Substring(s.Length - 2);
-            int hours = Int32.Parse(s.Substring(0, 2));
-            if (meridiem == "AM") {
-                if (hours == 12) {
-                    time = $"00{s.Substring(2,6)}";
-                }
-                else 
-                {
-                    time = s.Substring(0,8);
-                }
-            }         
-            else if(meridiem == "PM") {
-                Console.WriteLine(hours);
-                hours = hours != 12 ? 12 + hours : hours;
-                time = $"{hours}{s.Substring(2,6)}";
-            }        
-        }
-        catch
-        {
-            return time;
-        }
-        return time;
+        var dt = DateTime.ParseExact(s, "hh:mm:sstt",CultureInfo.InvariantCulture);
+        
+        return $"{dt:HH:mm:ss}";
+    
     }
 
 }
@@ -69,3 +49,4 @@ class Solution
         textWriter.Close();
     }
 }
+ 
